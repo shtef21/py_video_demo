@@ -20,6 +20,13 @@ with e.VideoFileClip('video.mp4') as original:
   #   blocks linting; i.e., most functions return type Any and not VideoClip.
   def to_vclip(inp) -> e.VideoClip:
     return inp
+  
+  # Add title to a clip
+  def add_text(clip, title) -> e.CompositeVideoClip:
+    return e.CompositeVideoClip([
+      clip,
+      e.TextClip(title, fontsize=50, color='white').set_position('center').set_duration(clip.duration)
+    ])
 
   # Take a subclip in interval 0-5s
   original = to_vclip(original.subclip(0, 5))
@@ -69,14 +76,9 @@ with e.VideoFileClip('video.mp4') as original:
     # as time progresses, scroll down and up
     frame_region = frame[int(t * 25):int(5 * 25) + 150, :]
     return frame_region
-
+  
   scrolling_vid = original.fl(scroll_filter)
-  scrolling_vid = e.CompositeVideoClip([
-    scrolling_vid,
-    e.TextClip('Scroll test', fontsize=70, color='white')
-      .set_position('center')
-      .set_duration(original.duration)
-  ])
+
 
   # Clip composition using clips_array
   cliparr_marg = original.margin(10)
@@ -118,19 +120,21 @@ with e.VideoFileClip('video.mp4') as original:
   # To play original clips, call .preview on it and comment out other clips
   clips_array = e.clips_array([
     [
-      original,
-      red_vid,
-      custom_fx_vid,
-      time_fx_vid,
+      add_text(original, 'original'),
+      add_text(red_vid, 'Increase red x10'),
+      add_text(custom_fx_vid, 'RGB => BRG'),
+      add_text(time_fx_vid, 'Looping'),
     ],
     [
       titled_vid,
-      conc_vid,
-      scrolling_vid,
-      cvclip_test,
+      add_text(conc_vid, 'Concatenate'),
+      add_text(scrolling_vid, 'Scroll'),
+      add_text(cvclip_test, 'Video composition'),
     ]
   ])
 
+  # To save output, send write_audiofile argument
+  # e.g. start the script with "python3 main.py --write_audiofile=true"
   write_af_flag = len([
     arg for arg in sys.argv
     if arg.lower() == '--write_audiofile=true'
