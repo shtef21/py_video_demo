@@ -5,8 +5,8 @@ import math
 import moviepy.config as moviepyconf
 import moviepy.editor as e
 
-# moviepyconf.IMAGEMAGICK_BINARY = 'insert binary here'
-moviepyconf.IMAGEMAGICK_BINARY = 'C:\\programi\\ImageMagick-7.1.1-Q16-HDRI\\magick.exe'
+# moviepyconf.IMAGEMAGICK_BINARY = 'insert path to magick.exe binary here'
+moviepyconf.IMAGEMAGICK_BINARY = 'C:\\programs\\ImageMagick-7.1.1-Q16-HDRI\\magick.exe'
 
 # Load the original video (.close will be called later)
 # In this case, with..as is not needed as its block is the
@@ -73,8 +73,10 @@ with e.VideoFileClip('video.mp4') as original:
   # Scroll effect
   def scroll_filter(get_frame, t):
     frame = get_frame(t)
-    # as time progresses, scroll down and up
-    frame_region = frame[int(t * 25):int(5 * 25) + 150, :]
+    scroll_speed = 100
+    y1 = int(t * scroll_speed)
+    y2 = int(t * scroll_speed) + 150
+    frame_region = frame[y1:y2, :]
     return frame_region
   
   scrolling_vid = original.fl(scroll_filter)
@@ -133,14 +135,14 @@ with e.VideoFileClip('video.mp4') as original:
     ]
   ])
 
-  # To save output, send write_audiofile argument
-  # e.g. start the script with "python3 main.py --write_audiofile=true"
+  # To save output, send write_videofile argument
+  # e.g. start the script with "python3 main.py --write_videofile=true"
   write_af_flag = len([
     arg for arg in sys.argv
-    if arg.lower() == '--write_audiofile=true'
+    if arg.lower() == '--write_videofile=true'
   ]) > 0
 
   if write_af_flag:
     clips_array.write_videofile('output.mp4')
   else:
-    scrolling_vid.preview()
+    original.preview()
