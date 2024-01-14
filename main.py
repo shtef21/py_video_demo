@@ -1,12 +1,9 @@
-# NVM, this dont work
-
 import sys
 import math
 import moviepy.config as moviepyconf
 import moviepy.editor as e
 
-# moviepyconf.IMAGEMAGICK_BINARY = 'insert path to magick.exe binary here'
-moviepyconf.IMAGEMAGICK_BINARY = 'C:\\programs\\ImageMagick-7.1.1-Q16-HDRI\\magick.exe'
+moviepyconf.IMAGEMAGICK_BINARY = 'C:\\ImageMagick-7.1.1-Q16-HDRI\\magick.exe'
 
 # Load the original video (.close will be called later)
 # In this case, with..as is not needed as its block is the
@@ -25,7 +22,9 @@ with e.VideoFileClip('video.mp4') as original:
   def add_text(clip, title) -> e.CompositeVideoClip:
     return e.CompositeVideoClip([
       clip,
-      e.TextClip(title, fontsize=50, color='white').set_position('center').set_duration(clip.duration)
+      e.TextClip(title, fontsize=50, color='white')
+        .set_position('center')
+        .set_duration(clip.duration)
     ])
 
   # Take a subclip in interval 0-5s
@@ -50,7 +49,7 @@ with e.VideoFileClip('video.mp4') as original:
   #   Add 1 to sin to avoid negative values
   #   Set duration to avoid infinite loops
   # Resulting video takes first 2 seconds of video and oscillates it in a loop (1x per second)
-  time_fx_vid = original                   \
+  time_fx_vid = original                               \
     .fl_time(lambda t: 1 + math.sin(2 * math.pi * t))  \
     .set_duration(original.duration)
 
