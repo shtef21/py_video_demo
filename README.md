@@ -4,7 +4,7 @@ Demo of Python video editing created with moviepy
 
 ## Prerequisites
 
-- For this to work, please install opencv-python
-- If not installed, moviepy will fall back to PIL, which does not have as many options
+To properly run `main.py`, you must:
 
-- Also install ImageMagick from https://imagemagick.org/
+- Install `opencv-python` and `pygame` using pip install
+- Install ImageMagick from https://imagemagick.org/ and insert its exe path to [main.py, line 6](https://github.com/shtef21/py_video_demo/blob/main/main.py#L6)
